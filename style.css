@@ -1,0 +1,132 @@
+:root {
+  --ink: #000;
+  --paper: #fff;
+  --rule: 1px solid #000;
+  --serif: "Newsreader", Georgia, serif;
+  --sans: "Instrument Sans", system-ui, sans-serif;
+  --kufi: "Reem Kufi", "Amiri", serif;
+  --ruqaa: "Aref Ruqaa", "Amiri", serif;
+  --naskh: "Amiri", serif;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { background: var(--paper); color: var(--ink); }
+
+body {
+  font-family: var(--serif);
+  font-size: 1.25rem;
+  line-height: 1.7;
+  background: var(--paper);
+  color: var(--ink);
+  -webkit-font-smoothing: antialiased;
+}
+
+a { color: inherit; text-decoration-thickness: 1px; text-underline-offset: 4px; }
+a:hover { background: var(--ink); color: var(--paper); text-decoration: none; }
+
+::selection { background: var(--ink); color: var(--paper); }
+
+.wrap { max-width: 760px; margin: 0 auto; padding: 0 24px; }
+
+/* ---------- nav ---------- */
+.nav {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 24px 0; font-family: var(--sans); font-size: .85rem;
+  letter-spacing: .14em; text-transform: uppercase;
+}
+.nav a { text-decoration: none; padding: 2px 4px; }
+.nav .brand { font-family: var(--kufi); font-size: 1.4rem; letter-spacing: 0; text-transform: none; }
+.nav ul { display: flex; gap: 24px; list-style: none; }
+
+/* ---------- hero ---------- */
+.hero {
+  border-top: var(--rule); border-bottom: var(--rule);
+  text-align: center; padding: 72px 24px 80px; position: relative;
+}
+.hero::before, .hero::after {
+  content: ""; position: absolute; left: 0; right: 0; height: 5px;
+  border-top: var(--rule); border-bottom: var(--rule);
+}
+.hero::before { top: 6px; }
+.hero::after { bottom: 6px; }
+
+.bismillah {
+  font-family: var(--ruqaa); font-size: clamp(1.6rem, 4vw, 2.4rem);
+  line-height: 1.6; margin-bottom: 40px;
+}
+.star { width: 64px; height: 64px; display: block; margin: 0 auto 28px; }
+.name-ar {
+  font-family: var(--kufi); font-weight: 700;
+  font-size: clamp(4.5rem, 17vw, 11rem); line-height: 1.15;
+}
+.name-en {
+  font-family: var(--sans); font-size: .9rem; letter-spacing: .5em;
+  text-transform: uppercase; margin-top: 28px; padding-left: .5em;
+}
+.tagline {
+  font-family: var(--naskh); font-size: 1.7rem; margin-top: 36px; line-height: 1.8;
+}
+.tagline small {
+  display: block; font-family: var(--serif); font-style: italic;
+  font-size: 1.05rem; margin-top: 2px;
+}
+
+/* ---------- sections ---------- */
+section { padding: 72px 0 8px; }
+.label {
+  font-family: var(--sans); font-size: .75rem; letter-spacing: .25em;
+  text-transform: uppercase; padding-bottom: 12px; border-bottom: var(--rule);
+  display: flex; justify-content: space-between;
+}
+.label .ar { font-family: var(--naskh); font-size: 1.2rem; letter-spacing: 0; text-transform: none; }
+
+.post-list { list-style: none; }
+.post-list li { border-bottom: var(--rule); }
+.post-list a {
+  display: grid; grid-template-columns: 110px 1fr; gap: 24px;
+  padding: 28px 8px; text-decoration: none;
+}
+.post-list time {
+  font-family: var(--sans); font-size: .8rem; letter-spacing: .1em;
+  text-transform: uppercase; padding-top: 8px;
+}
+.post-list h3 { font-size: 1.7rem; font-weight: 500; line-height: 1.25; }
+.post-list p { font-size: 1.05rem; margin-top: 6px; }
+.post-list a:hover time, .post-list a:hover h3, .post-list a:hover p { color: var(--paper); }
+
+.about p + p { margin-top: 1em; }
+.about { padding-top: 32px; }
+
+/* ---------- article ---------- */
+article { padding: 56px 0 24px; }
+article .meta {
+  font-family: var(--sans); font-size: .8rem; letter-spacing: .15em; text-transform: uppercase;
+}
+article h1 {
+  font-size: clamp(2.2rem, 6vw, 3.4rem); font-weight: 500; line-height: 1.12;
+  margin: 12px 0 32px; letter-spacing: -.01em;
+}
+article p { margin-bottom: 1.3em; }
+article blockquote {
+  border-left: 3px solid var(--ink); padding-left: 24px; margin: 2em 0; font-style: italic;
+}
+article .ayah {
+  font-family: var(--naskh); font-size: 2rem; line-height: 2.1; text-align: center;
+  direction: rtl; border-top: var(--rule); border-bottom: var(--rule);
+  padding: 20px 0; margin: 2em 0 .5em;
+}
+article .ayah-tr { text-align: center; font-style: italic; font-size: 1.05rem; }
+
+/* ---------- footer ---------- */
+footer {
+  margin-top: 96px; border-top: var(--rule); padding: 32px 0 48px;
+  font-family: var(--sans); font-size: .8rem; letter-spacing: .1em; text-align: center;
+}
+footer .ar { font-family: var(--naskh); font-size: 1.3rem; letter-spacing: 0; display: block; margin-bottom: 6px; }
+
+@media (max-width: 560px) {
+  body { font-size: 1.12rem; }
+  .post-list a { grid-template-columns: 1fr; gap: 4px; }
+  .nav ul { gap: 12px; }
+}
