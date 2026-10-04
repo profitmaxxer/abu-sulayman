@@ -7,39 +7,46 @@
   <link rel="icon" href="../favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Aref+Ruqaa:wght@400;700&family=Instrument+Sans:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=Reem+Kufi:wght@400;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&family=Reem+Kufi:wght@400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../style.css">
 </head>
 <body>
-  <div class="wrap">
-    <nav class="nav">
-      <a class="brand" href="../">أبو سليمان</a>
+  <nav class="nav">
+    <div class="wrap">
+      <a class="brand" href="../">
+        <svg viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="7" aria-hidden="true">
+          <rect x="20" y="20" width="60" height="60"/>
+          <rect x="20" y="20" width="60" height="60" transform="rotate(45 50 50)"/>
+        </svg>
+        <span class="ar" lang="ar">أبو سليمان</span>
+      </a>
       <ul>
         <li><a href="../#writing">Writing</a></li>
         <li><a href="../#about">About</a></li>
       </ul>
-    </nav>
-  </div>
+    </div>
+  </nav>
 
-  <main class="wrap">
-    <article>
-      <p class="meta">Oct 3, 2026</p>
-      <h1>In the name of Allah: why I'm writing here</h1>
+  <article class="article">
+    <a class="back mono" href="../#writing">← All writing</a>
+    <p class="mono">001 · Oct 3, 2026</p>
+    <h1>In the name of Allah: why I'm writing here</h1>
 
-      <p>Every good thing starts with the name of Allah, so that is where this starts. This site is a place to put down what I'm learning, thinking about and building.</p>
+    <p>Every good thing starts with the name of Allah, so that is where this starts. This site is a place to put down what I'm learning, thinking about and building.</p>
 
-      <p>I don't want it to be a performance. I want it to be useful to me first, and if it benefits someone else, all the better.</p>
+    <p>I don't want it to be a performance. I want it to be useful to me first, and if it benefits someone else, all the better.</p>
 
-      <p class="ayah" lang="ar">وَمَا تَوْفِيقِي إِلَّا بِٱللَّهِ ۚ عَلَيْهِ تَوَكَّلْتُ وَإِلَيْهِ أُنِيبُ</p>
-      <p class="ayah-tr">"My success is only by Allah. In Him I trust, and to Him I turn." (Hud 11:88)</p>
+    <p class="ayah" lang="ar" dir="rtl">وَمَا تَوْفِيقِي إِلَّا بِٱللَّهِ ۚ عَلَيْهِ تَوَكَّلْتُ وَإِلَيْهِ أُنِيبُ</p>
+    <p class="ayah-tr">"My success is only by Allah. In Him I trust, and to Him I turn." (Hud 11:88)</p>
 
-      <p style="margin-top:2em">Replace this post with your own. To add a new one, copy this file, edit it, and add a link in <code>index.html</code>.</p>
-    </article>
-  </main>
+    <p>Replace this post with your own. To add a new one, copy this file, edit it, and add a link in <code>index.html</code>.</p>
+  </article>
 
   <footer>
-    <span class="ar" lang="ar">وَمَا تَوْفِيقِي إِلَّا بِٱللَّهِ</span>
-    © 2026 Abu Sulayman · abu-sulayman.xyz
+    <div class="wrap">
+      <span class="ar" lang="ar">وَمَا تَوْفِيقِي إِلَّا بِٱللَّهِ</span>
+      <span class="mono">© 2026 · abu-sulayman.xyz</span>
+    </div>
   </footer>
 </body>
 </html>

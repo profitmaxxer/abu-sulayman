@@ -8,63 +8,82 @@
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Aref+Ruqaa:wght@400;700&family=Instrument+Sans:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=Reem+Kufi:wght@400;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Aref+Ruqaa:wght@400;700&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&family=Reem+Kufi:wght@400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div class="wrap">
-    <nav class="nav">
-      <a class="brand" href="./">أبو سليمان</a>
+  <nav class="nav">
+    <div class="wrap">
+      <a class="brand" href="./">
+        <svg viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="7" aria-hidden="true">
+          <rect x="20" y="20" width="60" height="60"/>
+          <rect x="20" y="20" width="60" height="60" transform="rotate(45 50 50)"/>
+        </svg>
+        <span class="ar" lang="ar">أبو سليمان</span>
+      </a>
       <ul>
         <li><a href="#writing">Writing</a></li>
         <li><a href="#about">About</a></li>
       </ul>
-    </nav>
-  </div>
+    </div>
+  </nav>
 
   <header class="hero">
-    <p class="bismillah" lang="ar" dir="rtl">بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ</p>
-    <svg class="star" viewBox="0 0 100 100" fill="none" stroke="#000" stroke-width="2" aria-hidden="true">
-      <rect x="18" y="18" width="64" height="64"/>
-      <rect x="18" y="18" width="64" height="64" transform="rotate(45 50 50)"/>
-      <circle cx="50" cy="50" r="14"/>
-    </svg>
-    <h1 class="name-ar" lang="ar" dir="rtl">أبو سليمان</h1>
-    <p class="name-en">Abu Sulayman</p>
-    <p class="tagline" lang="ar" dir="rtl">
-      خواطر وكتابات ومشاريع
-      <small dir="ltr">Notes, writings &amp; projects</small>
-    </p>
+    <div class="wrap">
+      <div class="hero-text">
+        <p class="bismillah" lang="ar" dir="rtl">بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ</p>
+        <h1 class="name-ar" lang="ar" dir="rtl">أبو سليمان</h1>
+        <p class="name-en">Abu Sulayman</p>
+        <p class="intro">Notes, writings and the things I build.</p>
+        <div class="cta">
+          <a class="btn btn-solid" href="#writing">Read the writing <span class="arrow">→</span></a>
+          <a class="btn btn-ghost" href="#about">About me</a>
+        </div>
+      </div>
+      <figure class="portrait">
+        <div class="frame"><img src="portrait.svg" alt="Dot portrait of Abu Sulayman" width="345" height="499"></div>
+        <figcaption class="mono"><span>Fig. 01</span><span>1,230 dots</span></figcaption>
+      </figure>
+    </div>
   </header>
 
   <main class="wrap">
     <section id="writing">
-      <div class="label"><span>Writing</span><span class="ar" lang="ar">كتابات</span></div>
-      <ul class="post-list">
+      <div class="section-head"><h2>Writing</h2><span class="ar" lang="ar">كتابات</span></div>
+      <ul class="posts">
         <li>
           <a href="posts/bismillah.html">
-            <time datetime="2026-10-03">Oct 3, 2026</time>
+            <span class="num">001</span>
             <div>
               <h3>In the name of Allah: why I'm writing here</h3>
               <p>A first post, and what this place is for.</p>
+            </div>
+            <div class="side">
+              <time class="mono" datetime="2026-10-03">Oct 3, 2026</time>
+              <span class="go" aria-hidden="true">→</span>
             </div>
           </a>
         </li>
       </ul>
     </section>
 
-    <section id="about" class="about">
-      <div class="label"><span>About</span><span class="ar" lang="ar">نبذة</span></div>
-      <div style="padding-top:32px">
-        <p>This is the personal corner of Abu Sulayman: a place for notes, reflections and the things I build.</p>
-        <p>Edit this paragraph to say whatever you want about yourself.</p>
+    <section id="about">
+      <div class="section-head"><h2>About</h2><span class="ar" lang="ar">نبذة</span></div>
+      <div class="about-grid">
+        <p class="mono">Who's writing</p>
+        <div>
+          <p>This is the personal corner of Abu Sulayman: a place for notes, reflections and the things I build.</p>
+          <p>Edit this paragraph to say whatever you want about yourself.</p>
+        </div>
       </div>
     </section>
   </main>
 
   <footer>
-    <span class="ar" lang="ar">وَمَا تَوْفِيقِي إِلَّا بِٱللَّهِ</span>
-    © 2026 Abu Sulayman · abu-sulayman.xyz
+    <div class="wrap">
+      <span class="ar" lang="ar">وَمَا تَوْفِيقِي إِلَّا بِٱللَّهِ</span>
+      <span class="mono">© 2026 · abu-sulayman.xyz</span>
+    </div>
   </footer>
 </body>
 </html>
