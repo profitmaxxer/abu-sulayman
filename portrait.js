@@ -1,8 +1,7 @@
 // Draws the dot portrait as real SVG <circle> elements (no image file).
 (function () {
   var host = document.getElementById("portrait");
-  var small = window.matchMedia("(max-width: 640px)").matches;
-  var P = small && window.PORTRAIT_SM ? window.PORTRAIT_SM : window.PORTRAIT;
+  var P = window.PORTRAIT;
   if (!host || !P) return;
 
   var NS = "http://www.w3.org/2000/svg";
