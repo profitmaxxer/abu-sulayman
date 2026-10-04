@@ -1,4 +1,4 @@
-// Draws the dot portrait as real SVG <circle> elements (no image file).
+// Draws the dot portrait as live vector dots (SVG), batched per gray shade so it stays fast.
 (function () {
   var host = document.getElementById("portrait");
   var P = window.PORTRAIT;
@@ -19,20 +19,27 @@
     return "rgb(" + v + "," + v + "," + v + ")";
   }
 
-  var n = 0;
+  // one path per shade; each dot is a zero-length line drawn with a round cap
+  var paths = {}, n = 0;
   P.data.forEach(function (line, r) {
     for (var c = 0; c < line.length; c++) {
       var l = +line[c];
       if (!l) continue;
-      var dot = document.createElementNS(NS, "circle");
-      dot.setAttribute("cx", (c + 0.5 + (r % 2 ? 0.5 : 0)).toFixed(2));
-      dot.setAttribute("cy", (r * ROW + 0.5).toFixed(2));
-      dot.setAttribute("r", R);
-      dot.setAttribute("fill", gray(l));
-      dot.style.animationDelay = (r * 14) + "ms";
-      svg.appendChild(dot);
+      var x = (c + 0.5 + (r % 2 ? 0.5 : 0)).toFixed(2);
+      var y = (r * ROW + 0.5).toFixed(2);
+      paths[l] = (paths[l] || "") + "M" + x + " " + y + "h0";
       n++;
     }
+  });
+
+  Object.keys(paths).forEach(function (l) {
+    var p = document.createElementNS(NS, "path");
+    p.setAttribute("d", paths[l]);
+    p.setAttribute("stroke", gray(+l));
+    p.setAttribute("stroke-width", R * 2);
+    p.setAttribute("stroke-linecap", "round");
+    p.setAttribute("fill", "none");
+    svg.appendChild(p);
   });
 
   host.appendChild(svg);
