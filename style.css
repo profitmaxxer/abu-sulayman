@@ -109,16 +109,11 @@ a { color: inherit; text-decoration: none; }
   padding: 18px 18px 0; overflow: hidden;
   box-shadow: 0 1px 2px rgba(0,0,0,.04), 0 12px 40px -12px rgba(0,0,0,.12);
 }
-.portrait img {
-  display: block; width: 100%; height: auto;
-  animation: reveal 1.4s cubic-bezier(.2,.7,.2,1) both .15s;
-}
+.portrait svg { display: block; width: 100%; height: auto; }
+.portrait circle { opacity: 0; animation: pop .5s ease-out forwards; }
 .portrait figcaption { display: flex; justify-content: space-between; margin-top: 10px; }
 
-@keyframes reveal {
-  from { clip-path: inset(0 0 100% 0); opacity: .2; }
-  to   { clip-path: inset(0 0 0 0); opacity: 1; }
-}
+@keyframes pop { to { opacity: 1; } }
 
 /* ---------- sections ---------- */
 section { padding: clamp(56px, 9vw, 96px) 0 0; }
@@ -180,7 +175,7 @@ footer .ar { font-family: var(--naskh); font-size: 20px; }
 /* ---------- mobile: portrait stays on the side ---------- */
 @media (max-width: 640px) {
   .wrap { padding: 0 16px; }
-  .hero .wrap { grid-template-columns: 1fr 38%; gap: 16px; }
+  .hero .wrap { grid-template-columns: 1fr 44%; gap: 12px; }
   .portrait .frame { padding: 8px 8px 0; border-radius: 10px; }
   .portrait figcaption { display: none; }
   .cta { margin-top: 20px; }
