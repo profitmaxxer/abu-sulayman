@@ -9,7 +9,8 @@
   var ROW = 0.866;                    // hex packing
   var W = P.cols + 0.5, H = P.rows * ROW + 0.5;
   var svg = document.createElementNS(NS, "svg");
-  svg.setAttribute("viewBox", "0 0 " + W + " " + H.toFixed(2));
+  // data-view crops the portrait (e.g. to the head for the small avatar)
+  svg.setAttribute("viewBox", host.getAttribute("data-view") || "0 0 " + W + " " + H.toFixed(2));
   svg.setAttribute("role", "img");
   svg.setAttribute("aria-label", "Dot portrait of Abu Sulayman");
 
@@ -20,7 +21,7 @@
   }
 
   // one path per shade; each dot is a zero-length line drawn with a round cap
-  var paths = {}, n = 0;
+  var paths = {};
   P.data.forEach(function (line, r) {
     for (var c = 0; c < line.length; c++) {
       var l = +line[c];
@@ -28,7 +29,6 @@
       var x = (c + 0.5 + (r % 2 ? 0.5 : 0)).toFixed(2);
       var y = (r * ROW + 0.5).toFixed(2);
       paths[l] = (paths[l] || "") + "M" + x + " " + y + "h0";
-      n++;
     }
   });
 
@@ -43,6 +43,4 @@
   });
 
   host.appendChild(svg);
-  var count = document.getElementById("dot-count");
-  if (count) count.textContent = n.toLocaleString() + " dots";
 })();
