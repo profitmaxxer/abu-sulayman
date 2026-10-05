@@ -8,7 +8,7 @@
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Aref+Ruqaa:wght@400;700&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&family=Reem+Kufi:wght@400;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&family=Reem+Kufi:wght@400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -30,20 +30,34 @@
 
   <header class="hero">
     <div class="wrap">
-      <div class="hero-text">
-        <p class="bismillah" lang="ar" dir="rtl">بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ</p>
-        <h1 class="name-ar" lang="ar" dir="rtl">أبو سليمان</h1>
-        <p class="name-en">Abu Sulayman</p>
-        <p class="intro">Notes, writings and the things I build.</p>
-        <div class="cta">
-          <a class="btn btn-solid" href="#writing">Read the writing <span class="arrow">→</span></a>
-          <a class="btn btn-ghost" href="#about">About me</a>
+      <div class="kicker mono">
+        <span>Notes &amp; Writings</span>
+        <span lang="ar" dir="rtl" class="bismillah">بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ</span>
+      </div>
+
+      <h1 class="headline">Notes, <em>reflections</em> and the things I build.</h1>
+
+      <div class="byline">
+        <div class="avatar" id="portrait" data-view="2.5 1 50 50" role="img" aria-label="Portrait of Abu Sulayman"></div>
+        <div>
+          <p class="byline-name">Abu Sulayman <span class="ar" lang="ar">أبو سليمان</span></p>
+          <p class="byline-meta mono">Writing since 2026</p>
         </div>
       </div>
-      <figure class="portrait">
-        <div class="frame" id="portrait"></div>
-        <figcaption class="mono"><span>Fig. 01</span><span id="dot-count"></span></figcaption>
-      </figure>
+
+      <div class="actions">
+        <button class="quran-btn" type="button" data-quran-toggle aria-pressed="false">
+          <span class="quran-icon" aria-hidden="true">
+            <svg class="i-play" viewBox="0 0 16 16"><path d="M5 3.5v9l7.5-4.5z" fill="currentColor"/></svg>
+            <span class="i-bars"><i></i><i></i><i></i></span>
+          </span>
+          <span class="quran-label">
+            <span class="quran-title" data-quran-label>Listen to the Quran</span>
+            <span class="quran-sub mono">Mishary Alafasy</span>
+          </span>
+        </button>
+        <a class="link-arrow" href="#writing">Read the writing <span aria-hidden="true">→</span></a>
+      </div>
     </div>
   </header>
 
@@ -87,5 +101,6 @@
   </footer>
   <script src="portrait-data.js"></script>
   <script src="portrait.js"></script>
+  <script src="player.js" data-persist></script>
 </body>
 </html>
