@@ -5,8 +5,8 @@
   if (window.__quranPlayer) return;
   window.__quranPlayer = true;
 
-  // Mishary Rashid Alafasy, full surahs, via mp3quran.net
-  var SRC = "https://server8.mp3quran.net/afs/";
+  // Mishary Rashid Alafasy, full surahs (Hafs), via mp3quran.net's CDN
+  var SRC = "https://cdn.mp3quran.net/audio/mishary-alafasy/r1/";
   var RECITER = "Mishary Alafasy";
   var SURAHS = ("Al-Fatiha,Al-Baqarah,Al-Imran,An-Nisa,Al-Ma'idah,Al-An'am,Al-A'raf,Al-Anfal,At-Tawbah,Yunus," +
     "Hud,Yusuf,Ar-Ra'd,Ibrahim,Al-Hijr,An-Nahl,Al-Isra,Al-Kahf,Maryam,Ta-Ha," +
@@ -140,6 +140,7 @@
     }).then(function (html) {
       var doc = new DOMParser().parseFromString(html, "text/html");
       if (push) history.pushState({}, "", url);
+      shown = location.pathname + location.search;
       document.title = doc.title;
       // bring over any stylesheet the new page needs
       doc.querySelectorAll('head link[rel="stylesheet"]').forEach(function (l) {
@@ -170,7 +171,13 @@
     e.preventDefault();
     swap(a.href, true);
   });
-  window.addEventListener("popstate", function () { swap(location.href, false); });
+  // back/forward between anchors on the same page only needs a scroll, not a reload
+  var shown = location.pathname + location.search;
+  window.addEventListener("popstate", function () {
+    if (location.pathname + location.search !== shown) return swap(location.href, false);
+    var target = location.hash && document.getElementById(location.hash.slice(1));
+    if (target) target.scrollIntoView(); else window.scrollTo(0, 0);
+  });
 
   // ---- mount, and restore after a full reload ----
   document.body.insertBefore(bar, document.body.firstChild);
