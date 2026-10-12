@@ -37,26 +37,38 @@
 
       <h1 class="headline">Notes, <em>reflections</em> and the things I build.</h1>
 
-      <div class="byline">
-        <div class="avatar" id="portrait" data-view="2.5 1 50 50" role="img" aria-label="Portrait of Abu Sulayman"></div>
-        <div>
-          <p class="byline-name">Abu Sulayman <span class="ar" lang="ar">أبو سليمان</span></p>
-          <p class="byline-meta mono">Writing since 2026</p>
+      <div class="widgets">
+        <div class="card card-byline">
+          <div class="byline">
+            <div class="avatar" id="portrait" data-view="2.5 1 50 50" role="img" aria-label="Portrait of Abu Sulayman"></div>
+            <div>
+              <p class="byline-name">Abu Sulayman <span class="ar" lang="ar">أبو سليمان</span></p>
+              <p class="byline-meta mono">Writing since 2026</p>
+            </div>
+          </div>
+          <a class="link-arrow" href="#writing">Read the writing <span aria-hidden="true">→</span></a>
         </div>
-      </div>
 
-      <div class="actions">
-        <button class="quran-btn" type="button" data-quran-toggle aria-pressed="false">
-          <span class="quran-icon" aria-hidden="true">
-            <svg class="i-play" viewBox="0 0 16 16"><path d="M5 3.5v9l7.5-4.5z" fill="currentColor"/></svg>
-            <span class="i-bars"><i></i><i></i><i></i></span>
-          </span>
-          <span class="quran-label">
-            <span class="quran-title" data-quran-label>Listen to the Quran</span>
-            <span class="quran-sub mono">Saud Al-Shuraim</span>
-          </span>
-        </button>
-        <a class="link-arrow" href="#writing">Read the writing <span aria-hidden="true">→</span></a>
+        <div class="card card-quran">
+          <div class="card-head mono">
+            <span>Quran</span>
+            <span data-surah-count>Surah 1 / 114</span>
+          </div>
+          <button class="quran-btn" type="button" data-quran-toggle aria-pressed="false">
+            <span class="ring-wrap" aria-hidden="true">
+              <svg class="ring" viewBox="0 0 36 36"><circle class="ring-bg" cx="18" cy="18" r="16" pathLength="100"/><circle class="ring-fill" cx="18" cy="18" r="16" pathLength="100"/></svg>
+              <span class="quran-icon">
+                <svg class="i-play" viewBox="0 0 16 16"><path d="M5 3.5v9l7.5-4.5z" fill="currentColor"/></svg>
+                <span class="i-bars"><i></i><i></i><i></i></span>
+              </span>
+            </span>
+            <span class="quran-label">
+              <span class="quran-title" data-quran-label>Listen to the Quran</span>
+              <span class="quran-sub mono">Saud Al-Shuraim · older recitation</span>
+            </span>
+          </button>
+          <div class="dots" data-dots aria-hidden="true"></div>
+        </div>
       </div>
     </div>
   </header>
