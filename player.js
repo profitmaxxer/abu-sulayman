@@ -5,9 +5,9 @@
   if (window.__quranPlayer) return;
   window.__quranPlayer = true;
 
-  // Mishary Rashid Alafasy, full surahs (Hafs), via mp3quran.net's CDN
-  var SRC = "https://cdn.mp3quran.net/audio/mishary-alafasy/r1/";
-  var RECITER = "Mishary Alafasy";
+  // Saud Al-Shuraim's older recitation, full surahs, via quranicaudio.com
+  var SRC = "https://download.quranicaudio.com/quran/sa3ood_al-shuraym/older/";
+  var RECITER = "Saud Al-Shuraim";
   var SURAHS = ("Al-Fatiha,Al-Baqarah,Al-Imran,An-Nisa,Al-Ma'idah,Al-An'am,Al-A'raf,Al-Anfal,At-Tawbah,Yunus," +
     "Hud,Yusuf,Ar-Ra'd,Ibrahim,Al-Hijr,An-Nahl,Al-Isra,Al-Kahf,Maryam,Ta-Ha," +
     "Al-Anbiya,Al-Hajj,Al-Mu'minun,An-Nur,Al-Furqan,Ash-Shu'ara,An-Naml,Al-Qasas,Al-Ankabut,Ar-Rum," +
