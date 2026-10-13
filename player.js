@@ -5,9 +5,9 @@
   if (window.__quranPlayer) return;
   window.__quranPlayer = true;
 
-  // Mishary Rashid Alafasy, full surahs, via mp3quran.net
-  var SRC = "https://server8.mp3quran.net/afs/";
-  var RECITER = "Mishary Alafasy";
+  // Saud Al-Shuraim's older recitation, full surahs, via quranicaudio.com
+  var SRC = "https://download.quranicaudio.com/quran/sa3ood_al-shuraym/older/";
+  var RECITER = "Saud Al-Shuraim";
   var SURAHS = ("Al-Fatiha,Al-Baqarah,Al-Imran,An-Nisa,Al-Ma'idah,Al-An'am,Al-A'raf,Al-Anfal,At-Tawbah,Yunus," +
     "Hud,Yusuf,Ar-Ra'd,Ibrahim,Al-Hijr,An-Nahl,Al-Isra,Al-Kahf,Maryam,Ta-Ha," +
     "Al-Anbiya,Al-Hajj,Al-Mu'minun,An-Nur,Al-Furqan,Ash-Shu'ara,An-Naml,Al-Qasas,Al-Ankabut,Ar-Rum," +
@@ -35,17 +35,17 @@
   bar.className = "qp";
   bar.setAttribute("role", "region");
   bar.setAttribute("aria-label", "Quran player");
+  var RING = '<svg class="ring" viewBox="0 0 36 36" aria-hidden="true"><circle class="ring-bg" cx="18" cy="18" r="16" pathLength="100"/><circle class="ring-fill" cx="18" cy="18" r="16" pathLength="100"/></svg>';
   bar.innerHTML =
-    '<div class="wrap qp-in">' +
-      '<button class="qp-play" type="button" aria-label="Play">' + ICON_PLAY + ICON_PAUSE + '</button>' +
-      '<div class="qp-meta"><span class="qp-title"></span><span class="qp-sub">' + RECITER + '</span></div>' +
+    '<div class="wrap"><div class="qp-in">' +
+      '<button class="qp-play" type="button" aria-label="Play">' + RING + '<span class="qp-disc"></span>' + ICON_PLAY + ICON_PAUSE + '</button>' +
+      '<div class="qp-meta" title="Click to seek"><span class="qp-title"></span><span class="qp-sub">' + RECITER + '</span></div>' +
       '<span class="qp-time">0:00</span>' +
-      '<button class="qp-next" type="button" aria-label="Next surah">' + ICON_NEXT + '</button>' +
-      '<button class="qp-close" type="button" aria-label="Close player">' + ICON_CLOSE + '</button>' +
-    '</div>' +
-    '<div class="qp-bar"><div class="qp-fill"></div></div>';
+      '<button class="qp-ctl qp-next" type="button" aria-label="Next surah">' + ICON_NEXT + '</button>' +
+      '<button class="qp-ctl qp-close" type="button" aria-label="Close player">' + ICON_CLOSE + '</button>' +
+    '</div></div>';
   var $ = function (s) { return bar.querySelector(s); };
-  var playBtn = $(".qp-play"), title = $(".qp-title"), time = $(".qp-time"), fill = $(".qp-fill");
+  var playBtn = $(".qp-play"), title = $(".qp-title"), time = $(".qp-time");
 
   function fmt(t) {
     t = Math.max(0, Math.floor(t || 0));
@@ -60,7 +60,7 @@
       audio.currentTime = at;
     });
     title.textContent = n + ". " + SURAHS[n - 1];
-    fill.style.width = "0";
+    progress(0);
     time.textContent = fmt(at);
     if ("mediaSession" in navigator) {
       navigator.mediaSession.metadata = new MediaMetadata({ title: "Surah " + SURAHS[n - 1], artist: RECITER, album: "The Holy Quran" });
@@ -68,6 +68,11 @@
   }
 
   function show() { document.documentElement.classList.add("qp-on"); }
+
+  // every ring on the page (player and hero) shows the same position
+  function progress(p) {
+    document.querySelectorAll(".ring-fill").forEach(function (c) { c.style.strokeDashoffset = 100 - p; });
+  }
 
   function play() {
     if (!audio.src) load(surah);
@@ -94,6 +99,14 @@
     document.querySelectorAll("[data-quran-label]").forEach(function (l) {
       l.textContent = on ? "Now playing: " + SURAHS[surah - 1] : audio.src ? "Resume " + SURAHS[surah - 1] : "Listen to the Quran";
     });
+    // one dot per surah in the hero: reached surahs filled, the current one ringed
+    document.querySelectorAll("[data-dots]").forEach(function (g) {
+      if (!g.children.length) for (var i = 0; i < 114; i++) g.appendChild(document.createElement("i"));
+      [].forEach.call(g.children, function (d, i) {
+        d.className = i < surah ? (i === surah - 1 ? "on cur" : "on") : "";
+      });
+    });
+    document.querySelectorAll("[data-surah-count]").forEach(function (c) { c.textContent = "Surah " + surah + " / 114"; });
     save();
   }
 
@@ -101,7 +114,7 @@
   audio.addEventListener("pause", sync);
   audio.addEventListener("timeupdate", function () {
     time.textContent = fmt(audio.duration ? audio.duration - audio.currentTime : audio.currentTime);
-    if (audio.duration) fill.style.width = (audio.currentTime / audio.duration * 100) + "%";
+    progress(audio.duration ? audio.currentTime / audio.duration * 100 : 0);
   });
   audio.addEventListener("ended", function () { load(surah % 114 + 1); play(); });
   setInterval(function () { if (!audio.paused) save(); }, 3000);
@@ -114,7 +127,7 @@
     document.documentElement.classList.remove("qp-on");
     save();
   };
-  $(".qp-bar").onclick = function (e) {
+  $(".qp-meta").onclick = function (e) {
     if (!audio.duration) return;
     var r = this.getBoundingClientRect();
     audio.currentTime = (e.clientX - r.left) / r.width * audio.duration;
@@ -140,6 +153,7 @@
     }).then(function (html) {
       var doc = new DOMParser().parseFromString(html, "text/html");
       if (push) history.pushState({}, "", url);
+      shown = location.pathname + location.search;
       document.title = doc.title;
       // bring over any stylesheet the new page needs
       doc.querySelectorAll('head link[rel="stylesheet"]').forEach(function (l) {
@@ -170,7 +184,13 @@
     e.preventDefault();
     swap(a.href, true);
   });
-  window.addEventListener("popstate", function () { swap(location.href, false); });
+  // back/forward between anchors on the same page only needs a scroll, not a reload
+  var shown = location.pathname + location.search;
+  window.addEventListener("popstate", function () {
+    if (location.pathname + location.search !== shown) return swap(location.href, false);
+    var target = location.hash && document.getElementById(location.hash.slice(1));
+    if (target) target.scrollIntoView(); else window.scrollTo(0, 0);
+  });
 
   // ---- mount, and restore after a full reload ----
   document.body.insertBefore(bar, document.body.firstChild);
