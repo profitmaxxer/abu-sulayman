@@ -11,11 +11,15 @@
   --serif: "Instrument Serif", Georgia, serif;
   --naskh: "Amiri", serif;
   --radius: 14px;
+  --nav-h: 65px;
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
-html { background: var(--paper); color: var(--ink); scroll-behavior: smooth; }
+html {
+  background: var(--paper); color: var(--ink); scroll-behavior: smooth;
+  scroll-padding-top: var(--nav-h); /* anchors land below the sticky nav */
+}
 
 body {
   font-family: var(--sans);
@@ -38,27 +42,28 @@ a { color: inherit; text-decoration: none; }
 }
 
 /* ---------- nav ---------- */
+/* hover styles are gated on (hover: hover) so taps on phones don't leave them stuck on */
 .nav {
   position: sticky; top: 0; z-index: 10;
-  background: rgba(255, 255, 255, .78);
+  background: rgba(255, 255, 255, .9);
   backdrop-filter: saturate(180%) blur(14px);
   -webkit-backdrop-filter: saturate(180%) blur(14px);
   border-bottom: 1px solid var(--line);
 }
-.nav .wrap { display: flex; align-items: center; justify-content: space-between; height: 60px; }
+.nav .wrap { display: flex; align-items: center; justify-content: space-between; height: 64px; }
 .brand { display: flex; align-items: center; gap: 10px; font-weight: 600; letter-spacing: -.01em; }
 .brand svg { width: 20px; height: 20px; }
 .brand .ar { font-family: var(--kufi); font-size: 20px; font-weight: 700; }
-.nav ul { display: flex; gap: 4px; list-style: none; }
+.nav ul { display: flex; gap: 6px; list-style: none; }
 .nav ul a {
   font-family: var(--mono); font-size: 12px; text-transform: uppercase; letter-spacing: .04em;
-  padding: 8px 12px; border-radius: 999px; color: var(--ink-2); transition: background .2s, color .2s;
+  padding: 7px 14px; border: 1px solid var(--ink); border-radius: 999px; transition: background .2s, color .2s;
 }
-.nav ul a:hover { background: var(--wash); color: var(--ink); }
+@media (hover: hover) { .nav ul a:hover { background: var(--ink); color: var(--paper); } }
 
 /* ---------- hero ---------- */
 .hero { border-bottom: 1px solid var(--line); }
-.hero .wrap { padding-top: clamp(28px, 6vw, 64px); padding-bottom: clamp(48px, 8vw, 88px); }
+.hero .wrap { padding-top: clamp(28px, 6vw, 56px); padding-bottom: clamp(40px, 7vw, 72px); }
 .kicker {
   display: flex; justify-content: space-between; align-items: baseline; gap: 16px;
   padding-bottom: 14px; border-bottom: 1px solid var(--ink);
@@ -74,6 +79,12 @@ a { color: inherit; text-decoration: none; }
 }
 .headline em { font-style: italic; color: var(--ink-2); }
 
+/* widget cards: 1px outlines and generous radius, like a home-screen grid */
+.widgets { display: grid; grid-template-columns: 1fr 1.5fr; gap: 14px; }
+.card { border: 1px solid var(--ink); border-radius: 24px; padding: 22px; background: var(--paper); min-width: 0; }
+.card-head { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
+
+.card-byline { display: flex; flex-direction: column; justify-content: space-between; gap: 28px; }
 .byline { display: flex; align-items: center; gap: 14px; }
 .avatar {
   width: 52px; height: 52px; flex: none; border-radius: 50%; overflow: hidden;
@@ -83,72 +94,83 @@ a { color: inherit; text-decoration: none; }
 .byline-name { font-weight: 500; letter-spacing: -.01em; line-height: 1.3; }
 .byline-name .ar { font-family: var(--kufi); font-size: 15px; color: var(--ink-3); margin-left: 6px; }
 .byline-meta { font-size: 11px; color: var(--ink-3); margin-top: 2px; }
-
-.actions {
-  display: flex; align-items: center; flex-wrap: wrap; gap: 14px 28px;
-  margin-top: clamp(28px, 5vw, 40px); padding-top: clamp(24px, 4vw, 32px);
-  border-top: 1px solid var(--line);
-}
-.link-arrow { font-size: 15px; font-weight: 500; border-bottom: 1px solid var(--ink); padding-bottom: 1px; }
+.link-arrow { font-size: 15px; font-weight: 500; border-bottom: 1px solid var(--ink); padding-bottom: 1px; align-self: flex-start; }
 .link-arrow span { display: inline-block; transition: transform .2s; }
 .link-arrow:hover span { transform: translateX(3px); }
 
-/* the Quran button */
+.card-quran { display: flex; flex-direction: column; gap: 22px; }
 .quran-btn {
-  display: inline-flex; align-items: center; gap: 12px; cursor: pointer;
-  font: inherit; color: var(--ink); text-align: left;
-  background: var(--paper); border: 1px solid var(--ink); border-radius: 999px;
-  padding: 6px 20px 6px 6px; transition: background .2s, color .2s;
+  display: flex; align-items: center; gap: 14px; width: 100%; padding: 0;
+  background: none; border: 0; font: inherit; color: var(--ink); text-align: left; cursor: pointer;
 }
-.quran-btn:hover { background: var(--wash); }
+.ring-wrap { position: relative; width: 56px; height: 56px; flex: none; }
+.ring { display: block; width: 100%; height: 100%; transform: rotate(-90deg); }
+.ring-bg, .ring-fill { fill: none; stroke-width: 2.5; }
+.ring-bg { stroke: var(--line); }
+.ring-fill {
+  stroke: var(--ink); stroke-linecap: round;
+  stroke-dasharray: 100; stroke-dashoffset: 100; transition: stroke-dashoffset .4s linear;
+}
 .quran-icon {
-  width: 36px; height: 36px; flex: none; border-radius: 50%; display: grid; place-items: center;
+  position: absolute; inset: 10px; border-radius: 50%; display: grid; place-items: center;
   background: var(--ink); color: var(--paper);
 }
-.quran-icon svg { width: 14px; height: 14px; margin-left: 2px; }
-.quran-label { display: flex; flex-direction: column; line-height: 1.2; }
-.quran-title { font-size: 14px; font-weight: 500; }
-.quran-sub { font-size: 10px; color: var(--ink-3); margin-top: 2px; }
+.quran-icon svg { width: 12px; height: 12px; margin-left: 2px; }
+.quran-label { display: flex; flex-direction: column; line-height: 1.25; min-width: 0; }
+.quran-title { font-size: 16px; font-weight: 500; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.quran-sub { font-size: 10px; color: var(--ink-2); margin-top: 4px; }
 .i-bars { display: none; gap: 2px; align-items: end; height: 12px; }
-.i-bars i { width: 2px; height: 100%; background: currentColor; border-radius: 1px; animation: bar 1s ease-in-out infinite; }
+.i-bars i { width: 2px; height: 100%; background: currentColor; border-radius: 1px; animation: bar 1s ease-in-out infinite; transform-origin: bottom; }
 .i-bars i:nth-child(2) { animation-delay: -.4s; }
 .i-bars i:nth-child(3) { animation-delay: -.7s; }
 .quran-btn[aria-pressed="true"] .i-play { display: none; }
 .quran-btn[aria-pressed="true"] .i-bars { display: flex; }
 @keyframes bar { 0%, 100% { transform: scaleY(.35); } 50% { transform: scaleY(1); } }
-.i-bars i { transform-origin: bottom; }
-
 @keyframes fade-in { from { opacity: 0; } to { opacity: 1; } }
 
-/* ---------- sticky Quran player ---------- */
-:root { --qp-h: 44px; }
+/* one dot per surah: filled once reached, the current one ringed */
+.dots { display: grid; grid-template-columns: repeat(19, 1fr); gap: 6px; }
+.dots i { display: block; aspect-ratio: 1; border-radius: 50%; background: var(--line); }
+.dots i.on { background: var(--ink); }
+.dots i.cur { box-shadow: 0 0 0 2px var(--paper), 0 0 0 3.5px var(--ink); }
+
+/* ---------- sticky Quran player: a pill pinned to the top of every page ---------- */
+:root { --qp-h: 64px; --nav-h: 65px; }
 .qp {
   position: fixed; top: 0; left: 0; right: 0; z-index: 20; height: var(--qp-h);
-  background: var(--ink); color: var(--paper);
-  transform: translateY(-100%); transition: transform .3s ease;
+  background: var(--paper); transform: translateY(-100%); transition: transform .3s ease;
 }
 html.qp-on .qp { transform: none; }
 html.qp-on body { padding-top: var(--qp-h); }
 html.qp-on .nav { top: var(--qp-h); }
-.qp-in { display: flex; align-items: center; gap: 12px; height: 100%; }
-.qp button {
-  flex: none; width: 30px; height: 30px; display: grid; place-items: center; cursor: pointer;
-  background: none; border: 0; color: inherit; border-radius: 50%; transition: background .2s;
+html.qp-on { scroll-padding-top: calc(var(--qp-h) + var(--nav-h)); }
+.qp-in {
+  height: 48px; margin-top: 8px; display: flex; align-items: center; gap: 10px;
+  padding: 0 8px 0 4px; border: 1px solid var(--ink); border-radius: 999px; background: var(--paper);
 }
-.qp button:hover { background: rgba(255, 255, 255, .12); }
-.qp button svg { width: 14px; height: 14px; }
-.qp .qp-play { background: var(--paper); color: var(--ink); width: 28px; height: 28px; }
-.qp .qp-play:hover { background: var(--paper); }
+.qp-play {
+  position: relative; flex: none; width: 40px; height: 40px; padding: 0;
+  display: grid; place-items: center; background: none; border: 0; cursor: pointer; color: var(--paper);
+}
+.qp-play .ring { position: absolute; inset: 0; }
+.qp-disc { position: absolute; inset: 7px; border-radius: 50%; background: var(--ink); }
+.qp-play .i-play, .qp-play .i-pause { position: relative; width: 12px; height: 12px; }
 .qp-play .i-pause, .qp.playing .qp-play .i-play { display: none; }
 .qp.playing .qp-play .i-pause { display: block; }
 .qp-play .i-play { margin-left: 2px; }
-.qp-meta { flex: 1; min-width: 0; display: flex; align-items: baseline; gap: 10px; white-space: nowrap; overflow: hidden; }
-.qp-title { font-size: 13px; font-weight: 500; overflow: hidden; text-overflow: ellipsis; }
-.qp-sub { font-family: var(--mono); font-size: 10px; letter-spacing: .04em; text-transform: uppercase; color: var(--ink-3); }
-.qp-time { font-family: var(--mono); font-size: 11px; color: var(--ink-3); font-variant-numeric: tabular-nums; }
-.qp-bar { position: absolute; left: 0; right: 0; bottom: 0; height: 2px; background: rgba(255, 255, 255, .14); cursor: pointer; }
-.qp-bar::before { content: ""; position: absolute; left: 0; right: 0; top: -8px; bottom: 0; }
-.qp-fill { height: 100%; width: 0; background: var(--paper); }
+.qp-meta {
+  flex: 1; min-width: 0; display: flex; align-items: baseline; gap: 10px;
+  white-space: nowrap; overflow: hidden; cursor: pointer;
+}
+.qp-title { font-size: 14px; font-weight: 500; overflow: hidden; text-overflow: ellipsis; }
+.qp-sub { font-family: var(--mono); font-size: 10px; letter-spacing: .04em; text-transform: uppercase; color: var(--ink-2); }
+.qp-time { font-family: var(--mono); font-size: 11px; color: var(--ink-2); font-variant-numeric: tabular-nums; }
+.qp-ctl {
+  flex: none; width: 32px; height: 32px; display: grid; place-items: center; cursor: pointer;
+  background: none; border: 0; border-radius: 50%; color: var(--ink); transition: background .2s;
+}
+.qp-ctl svg { width: 14px; height: 14px; }
+@media (hover: hover) { .qp-ctl:hover { background: var(--wash); } }
 
 /* ---------- sections ---------- */
 section { padding: clamp(56px, 9vw, 96px) 0 0; }
@@ -165,7 +187,7 @@ section { padding: clamp(56px, 9vw, 96px) 0 0; }
   display: grid; grid-template-columns: 56px 1fr auto; gap: 20px; align-items: center;
   padding: 24px 12px; margin: 0 -12px; border-radius: 10px; transition: background .2s;
 }
-.posts a:hover { background: var(--wash); }
+@media (hover: hover) { .posts a:hover { background: var(--wash); } }
 .posts .num { font-family: var(--mono); font-size: 12px; color: var(--ink-3); }
 .posts h3 { font-size: clamp(18px, 2.4vw, 22px); font-weight: 500; letter-spacing: -.02em; line-height: 1.3; }
 .posts p { color: var(--ink-2); font-size: 15px; margin-top: 4px; }
@@ -174,7 +196,7 @@ section { padding: clamp(56px, 9vw, 96px) 0 0; }
   width: 32px; height: 32px; display: grid; place-items: center; border-radius: 999px;
   border: 1px solid var(--line); transition: transform .2s, background .2s, color .2s, border-color .2s;
 }
-.posts a:hover .go { background: var(--ink); color: var(--paper); border-color: var(--ink); transform: rotate(-45deg); }
+@media (hover: hover) { .posts a:hover .go { background: var(--ink); color: var(--paper); border-color: var(--ink); transform: rotate(-45deg); } }
 
 .about-grid {
   display: grid; grid-template-columns: 1fr 1.6fr; gap: 40px; padding-top: 28px;
@@ -211,7 +233,11 @@ footer .ar { font-family: var(--naskh); font-size: 20px; }
 @media (max-width: 640px) {
   .wrap { padding: 0 16px; }
   .kicker .bismillah { font-size: 14px; }
-  .nav ul a { padding: 8px 8px; }
+  .nav ul { gap: 4px; }
+  .nav ul a { padding: 6px 10px; }
+  .widgets { grid-template-columns: 1fr; }
+  .card { padding: 18px; border-radius: 20px; }
+  .dots { gap: 4px; }
   .qp-sub { display: none; }
   .posts a { grid-template-columns: 1fr auto; gap: 12px; }
   .posts .num, .posts time { display: none; }
