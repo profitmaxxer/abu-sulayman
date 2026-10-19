@@ -5,9 +5,11 @@
   if (window.__quranPlayer) return;
   window.__quranPlayer = true;
 
-  // Saud Al-Shuraim's older recitation, full surahs, via quranicaudio.com
-  var SRC = "https://download.quranicaudio.com/quran/sa3ood_al-shuraym/older/";
-  var RECITER = "Saud Al-Shuraim";
+  // Two reciters, full surahs, from open Quran audio hosts. Each reciter lists mirrors; if one fails the next is tried.
+  var RECITERS = {
+    shuraim: { name: "Saud Al-Shuraim", srcs: ["https://download.quranicaudio.com/quran/sa3ood_al-shuraym/older/", "https://server7.mp3quran.net/shur/"] },
+    ayyub: { name: "Muhammad Ayyub", srcs: ["https://download.quranicaudio.com/quran/muhammad_ayyoob_hq/", "https://server8.mp3quran.net/ayyub/"] }
+  };
   var SURAHS = ("Al-Fatiha,Al-Baqarah,Al-Imran,An-Nisa,Al-Ma'idah,Al-An'am,Al-A'raf,Al-Anfal,At-Tawbah,Yunus," +
     "Hud,Yusuf,Ar-Ra'd,Ibrahim,Al-Hijr,An-Nahl,Al-Isra,Al-Kahf,Maryam,Ta-Ha," +
     "Al-Anbiya,Al-Hajj,Al-Mu'minun,An-Nur,Al-Furqan,Ash-Shu'ara,An-Naml,Al-Qasas,Al-Ankabut,Ar-Rum," +
@@ -20,6 +22,10 @@
     "Ash-Shams,Al-Layl,Ad-Duha,Ash-Sharh,At-Tin,Al-Alaq,Al-Qadr,Al-Bayyinah,Az-Zalzalah,Al-Adiyat," +
     "Al-Qari'ah,At-Takathur,Al-Asr,Al-Humazah,Al-Fil,Quraysh,Al-Ma'un,Al-Kawthar,Al-Kafirun,An-Nasr," +
     "Al-Masad,Al-Ikhlas,Al-Falaq,An-Nas").split(",");
+  // 10 surahs per reciter, 20 recitations in all, played in a random order
+  var PICKS = [19, 12, 18, 55, 67, 36, 20, 56, 73, 32];
+  var TRACKS = [];
+  ["shuraim", "ayyub"].forEach(function (r) { PICKS.forEach(function (n) { TRACKS.push({ r: r, n: n }); }); });
   var KEY = "quran-player";
 
   var ICON_PLAY = '<svg class="i-play" viewBox="0 0 16 16" aria-hidden="true"><path d="M5 3.5v9l7.5-4.5z" fill="currentColor"/></svg>';
@@ -29,7 +35,17 @@
 
   var audio = new Audio();
   audio.preload = "metadata";
-  var surah = 1;
+  function shuffle(a) {
+    for (var i = a.length - 1; i > 0; i--) {
+      var j = Math.floor(Math.random() * (i + 1)), t = a[i]; a[i] = a[j]; a[j] = t;
+    }
+    return a;
+  }
+  var order = shuffle(TRACKS.map(function (_, i) { return i; })); // indexes into TRACKS
+  var pos = 0, mirror = 0, errors = 0;
+  function cur() { return TRACKS[order[pos]]; }
+  function sname() { return SURAHS[cur().n - 1]; }
+  function rname() { return RECITERS[cur().r].name; }
 
   var bar = document.createElement("div");
   bar.className = "qp";
@@ -39,31 +55,34 @@
   bar.innerHTML =
     '<div class="wrap"><div class="qp-in">' +
       '<button class="qp-play" type="button" aria-label="Play">' + RING + '<span class="qp-disc"></span>' + ICON_PLAY + ICON_PAUSE + '</button>' +
-      '<div class="qp-meta" title="Click to seek"><span class="qp-title"></span><span class="qp-sub">' + RECITER + '</span></div>' +
+      '<div class="qp-meta" title="Click to seek"><span class="qp-title"></span><span class="qp-sub"></span></div>' +
       '<span class="qp-time">0:00</span>' +
-      '<button class="qp-ctl qp-next" type="button" aria-label="Next surah">' + ICON_NEXT + '</button>' +
+      '<button class="qp-ctl qp-next" type="button" aria-label="Next recitation">' + ICON_NEXT + '</button>' +
       '<button class="qp-ctl qp-close" type="button" aria-label="Close player">' + ICON_CLOSE + '</button>' +
     '</div></div>';
   var $ = function (s) { return bar.querySelector(s); };
-  var playBtn = $(".qp-play"), title = $(".qp-title"), time = $(".qp-time");
+  var playBtn = $(".qp-play"), title = $(".qp-title"), sub = $(".qp-sub"), time = $(".qp-time");
 
   function fmt(t) {
     t = Math.max(0, Math.floor(t || 0));
     return Math.floor(t / 60) + ":" + ("0" + (t % 60)).slice(-2);
   }
 
-  function load(n, at) {
-    surah = n;
-    audio.src = SRC + ("00" + n).slice(-3) + ".mp3";
+  function load(p, at) {
+    pos = (p + order.length) % order.length;
+    mirror = 0;
+    var t = cur();
+    audio.src = RECITERS[t.r].srcs[0] + ("00" + t.n).slice(-3) + ".mp3";
     if (at) audio.addEventListener("loadedmetadata", function seek() {
       audio.removeEventListener("loadedmetadata", seek);
       audio.currentTime = at;
     });
-    title.textContent = n + ". " + SURAHS[n - 1];
+    title.textContent = t.n + ". " + sname();
+    sub.textContent = rname();
     progress(0);
     time.textContent = fmt(at);
     if ("mediaSession" in navigator) {
-      navigator.mediaSession.metadata = new MediaMetadata({ title: "Surah " + SURAHS[n - 1], artist: RECITER, album: "The Holy Quran" });
+      navigator.mediaSession.metadata = new MediaMetadata({ title: "Surah " + sname(), artist: rname(), album: "The Holy Quran" });
     }
   }
 
@@ -75,7 +94,7 @@
   }
 
   function play() {
-    if (!audio.src) load(surah);
+    if (!audio.src) load(pos);
     show();
     var p = audio.play();
     if (p && p.catch) p.catch(function () { sync(); });
@@ -84,7 +103,7 @@
   function save() {
     try {
       if (!document.documentElement.classList.contains("qp-on")) return localStorage.removeItem(KEY);
-      localStorage.setItem(KEY, JSON.stringify({ surah: surah, time: audio.currentTime || 0, playing: !audio.paused }));
+      localStorage.setItem(KEY, JSON.stringify({ order: order, pos: pos, time: audio.currentTime || 0, playing: !audio.paused }));
     } catch (e) {}
   }
 
@@ -97,16 +116,16 @@
       b.setAttribute("aria-pressed", on ? "true" : "false");
     });
     document.querySelectorAll("[data-quran-label]").forEach(function (l) {
-      l.textContent = on ? "Now playing: " + SURAHS[surah - 1] : audio.src ? "Resume " + SURAHS[surah - 1] : "Listen to the Quran";
+      l.textContent = on ? "Now playing: " + sname() : audio.src ? "Resume " + sname() : "Listen to the Quran";
     });
-    // one dot per surah in the hero: reached surahs filled, the current one ringed
+    // one dot per recitation in the hero: played ones filled, the current one ringed
     document.querySelectorAll("[data-dots]").forEach(function (g) {
-      if (!g.children.length) for (var i = 0; i < 114; i++) g.appendChild(document.createElement("i"));
+      if (g.children.length !== order.length) { g.textContent = ""; for (var i = 0; i < order.length; i++) g.appendChild(document.createElement("i")); }
       [].forEach.call(g.children, function (d, i) {
-        d.className = i < surah ? (i === surah - 1 ? "on cur" : "on") : "";
+        d.className = i <= pos ? (i === pos ? "on cur" : "on") : "";
       });
     });
-    document.querySelectorAll("[data-surah-count]").forEach(function (c) { c.textContent = "Surah " + surah + " / 114"; });
+    document.querySelectorAll("[data-surah-count]").forEach(function (c) { c.textContent = "Recitation " + (pos + 1) + " / " + order.length; });
     save();
   }
 
@@ -116,12 +135,23 @@
     time.textContent = fmt(audio.duration ? audio.duration - audio.currentTime : audio.currentTime);
     progress(audio.duration ? audio.currentTime / audio.duration * 100 : 0);
   });
-  audio.addEventListener("ended", function () { load(surah % 114 + 1); play(); });
+  audio.addEventListener("playing", function () { errors = 0; });
+  audio.addEventListener("ended", function () { load(pos + 1); play(); });
+  // a file that won't load: try the reciter's next mirror, then skip to the next recitation
+  audio.addEventListener("error", function () {
+    var t = cur(), srcs = RECITERS[t.r].srcs;
+    if (++mirror < srcs.length) {
+      var at = audio.currentTime; audio.src = srcs[mirror] + ("00" + t.n).slice(-3) + ".mp3";
+      if (at) audio.currentTime = at;
+      return audio.play().catch(function () {});
+    }
+    if (++errors < order.length) { load(pos + 1); play(); }
+  });
   setInterval(function () { if (!audio.paused) save(); }, 3000);
   window.addEventListener("pagehide", save);
 
   playBtn.onclick = function () { audio.paused ? play() : audio.pause(); };
-  $(".qp-next").onclick = function () { load(surah % 114 + 1); play(); };
+  $(".qp-next").onclick = function () { load(pos + 1); play(); };
   $(".qp-close").onclick = function () {
     audio.pause();
     document.documentElement.classList.remove("qp-on");
@@ -136,7 +166,7 @@
   if ("mediaSession" in navigator) {
     navigator.mediaSession.setActionHandler("play", play);
     navigator.mediaSession.setActionHandler("pause", function () { audio.pause(); });
-    navigator.mediaSession.setActionHandler("nexttrack", function () { load(surah % 114 + 1); play(); });
+    navigator.mediaSession.setActionHandler("nexttrack", function () { load(pos + 1); play(); });
   }
 
   // any [data-quran-toggle] button on any page drives the same player
@@ -196,8 +226,9 @@
   document.body.insertBefore(bar, document.body.firstChild);
   var saved = null;
   try { saved = JSON.parse(localStorage.getItem(KEY)); } catch (e) {}
-  if (saved && saved.surah) {
-    load(saved.surah, saved.time);
+  if (saved && saved.order && saved.order.length === TRACKS.length) {
+    order = saved.order;
+    load(saved.pos || 0, saved.time);
     show();
     if (saved.playing) play();
   }
